@@ -5,6 +5,7 @@ use App\Http\Controllers\BelajarController;
 use App\Http\Controllers\LoginController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\CategoriesController;
+use App\Http\Controllers\UsersController;
 
 Route::get('/', function () {
     return view('welcome');
@@ -24,3 +25,4 @@ Route::post('action-login', [LoginController::class, 'actionLogin'] );
 // get, post, put, delete
 Route::resource('dashboard', DashboardController::class);
 Route::resource('categories', CategoriesController::class);
+Route::resource('user', UsersController::class);

@@ -14,7 +14,7 @@ class LoginController extends Controller
     public function actionLogin(Request $request){
         $request->validate([
             'email' => 'required|email',
-            'password' => 'required|min:8|max:20|'
+            'password' => 'required'
         ]);
 
 
