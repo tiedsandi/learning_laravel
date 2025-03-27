@@ -13,15 +13,19 @@ Route::get('/', function () {
 
 Route::get('belajar', [BelajarController::class, 'index'] );
 Route::get('tambah', [BelajarController::class, 'tambah'] );
-Route::get('kurang', [BelajarController::class, 'kurang'] );
-Route::get('kali', [BelajarController::class, 'kali'] );
-Route::get('bagi', [BelajarController::class, 'bagi'] );
+
 Route::get('login', [LoginController::class, 'login'] )->name('login');
 Route::get('logout', [LoginController::class, 'logout'] );
 
 
 Route::post('action-tambah', [BelajarController::class, 'actionTambah'] );
 Route::post('action-login', [LoginController::class, 'actionLogin'] );
+
+Route::group(['middleware'=>'auth'], function(){
+    Route::get('kurang', [BelajarController::class, 'kurang'] );
+    Route::get('kali', [BelajarController::class, 'kali'] );
+    Route::get('bagi', [BelajarController::class, 'bagi'] );
+});
 
 // get, post, put, delete
 Route::resource('dashboard', DashboardController::class)->middleware('auth');
