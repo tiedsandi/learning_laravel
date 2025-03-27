@@ -150,3 +150,9 @@ php artisan migrate
 php artisan db:seed
 
 ```
+
+### catatan
+
+- membuat layouts
+- memakai Route::resource
+- penggunaan yield, extends, section
