@@ -157,7 +157,7 @@ php artisan db:seed
 - memakai Route::resource
 - penggunaan yield, extends, section -->
 
-# Laravel Project
+<!-- # Laravel Project
 
 ## Persyaratan
 
@@ -404,4 +404,257 @@ Akses proyek di browser:
 
 ```arduino
 http://127.0.0.1:8000/posts
+``` -->
+
+# README Laravel
+
+## 1. Instalasi Laravel
+
+Sebelum menginstall Laravel, pastikan sudah menginstall:
+
+- PHP (>= 8.0)
+- Composer
+- MySQL (atau database lain sesuai kebutuhan)
+
+### 1.1 Instalasi Laravel via Composer
+
+Laravel dapat diinstal dengan dua cara:
+
+#### a) Instalasi Laravel secara global
+
+1. **Install Laravel secara global menggunakan Composer:**
+   ```sh
+   composer global require laravel/installer
+   ```
+2. **Buat proyek Laravel baru dengan perintah berikut:**
+   ```sh
+   laravel new nama_proyek
+   ```
+
+#### b) Instalasi Laravel tanpa installer global
+
+1. **Install Laravel via Composer:**
+   ```sh
+   composer create-project --prefer-dist laravel/laravel nama_proyek
+   ```
+2. **Masuk ke folder proyek:**
+   ```sh
+   cd nama_proyek
+   ```
+3. **Jalankan server development:**
+   ```sh
+   php artisan serve
+   ```
+   Laravel akan berjalan di `http://127.0.0.1:8000`.
+
+---
+
+## 2. Struktur Folder di Laravel
+
+Setelah instalasi, berikut adalah struktur folder utama Laravel:
+
+- **app/** → Berisi kode utama aplikasi seperti model, controller, middleware, dan
+  lainnya.
+- **bootstrap/** → Berisi file untuk bootstrap aplikasi, termasuk `cache/` untuk
+  meningkatkan performa.
+- **config/** → Berisi file konfigurasi aplikasi.
+- **database/** → Menyimpan file migration, seeder, dan factory.
+- **public/** → Folder untuk file statis seperti gambar, CSS, JS, serta `index.php`
+  sebagai entry point.
+- **resources/** → Berisi file view (Blade template), assets, dan bahasa.
+- **routes/** → Menyimpan file rute aplikasi (`web.php`, `api.php`, dll).
+- **storage/** → Berisi cache, log, dan file yang diunggah.
+- **tests/** → Folder untuk pengujian unit dan fitur.
+- **vendor/** → Berisi dependensi yang diinstal melalui Composer.
+
 ```
+laravel_project/
+│── app/
+│   ├── Http/
+│   │   ├── Controllers/    # Berisi controller aplikasi
+│   │   ├── Middleware/     # Middleware untuk request
+│   │   ├── Requests/       # Request validation kustom
+│   ├── Models/             # Model database ada di sini
+│── bootstrap/              # Bootstrap framework Laravel
+│── config/                 # Konfigurasi aplikasi
+│── database/
+│   ├── migrations/         # File migrasi database
+│   ├── seeders/            # Seeder untuk mengisi database awal
+│── public/                 # Folder untuk file publik
+│── resources/
+│   ├── views/              # Semua tampilan (Blade template) ada di sini
+│── routes/
+│   ├── web.php             # Routing aplikasi web
+│   ├── api.php             # Routing API
+│── storage/                # Penyimpanan log, cache, dll.
+│── .env                    # Konfigurasi lingkungan
+│── artisan                 # CLI Laravel
+│── composer.json           # Daftar dependensi Laravel
+```
+
+---
+
+## 3. Konfigurasi File `.env`
+
+File `.env` digunakan untuk menyimpan konfigurasi seperti database, mail, dan
+lainnya. Contoh konfigurasi:
+
+```env
+APP_NAME=Laravel
+APP_ENV=local
+APP_KEY=base64:xxxxxxxxxxxxxxxxxxx=
+APP_DEBUG=true
+APP_URL=http://127.0.0.1:8000
+
+DB_CONNECTION=mysql
+DB_HOST=127.0.0.1
+DB_PORT=3306
+DB_DATABASE=nama_database
+DB_USERNAME=root
+DB_PASSWORD=
+```
+
+Setelah mengubah `.env`, jalankan perintah:
+
+```sh
+php artisan config:cache
+```
+
+agar perubahan diterapkan.
+
+---
+
+## 4. Membuat File dengan Artisan CLI
+
+Laravel menyediakan perintah Artisan untuk membuat berbagai file secara otomatis:
+
+### 4.1. Membuat Model
+
+```sh
+php artisan make:model NamaModel
+```
+
+Contoh:
+
+```sh
+php artisan make:model Product
+```
+
+### 4.2. Membuat Controller
+
+```sh
+php artisan make:controller NamaController
+```
+
+Contoh:
+
+```sh
+php artisan make:controller ProductController
+```
+
+### 4.3. Membuat Migration
+
+```sh
+php artisan make:migration create_nama_table
+```
+
+Contoh:
+
+```sh
+php artisan make:migration create_products_table
+```
+
+### 4.4. Membuat Resource Controller
+
+```sh
+php artisan make:controller NamaController --resource
+```
+
+Contoh:
+
+```sh
+php artisan make:controller ProductController --resource
+```
+
+Resource Controller sudah otomatis memiliki fungsi CRUD.
+
+### 4.5. Membuat Model + Migration + Factory + Seeder sekaligus
+
+```sh
+php artisan make:model NamaModel -mfs
+```
+
+Contoh:
+
+```sh
+php artisan make:model Product -mfs
+```
+
+Keterangan opsi:
+
+- `-m` → Sekaligus membuat migration.
+- `-f` → Sekaligus membuat factory.
+- `-s` → Sekaligus membuat seeder.
+
+---
+
+### 4.6. Membuat Seeder
+
+```sh
+php artisan make:seeder NamaSeeder
+```
+
+Contoh:
+
+```sh
+php artisan make:seeder ProductSeeder
+```
+
+### 4.7. Membuat Middleware
+
+```sh
+php artisan make:middleware NamaMiddleware
+```
+
+Contoh:
+
+```sh
+php artisan make:middleware CheckRole
+```
+
+---
+
+### 5. Mengatasi Folder yang Hilang Setelah Clone dari GitHub
+
+Ketika proyek Laravel diunggah ke GitHub, beberapa folder seperti `vendor/` dan
+`node_modules/` tidak akan ikut terupload karena ada di `.gitignore`. Setelah
+meng-clone proyek, jalankan perintah berikut untuk mengunduh dependensi yang hilang:
+
+1. **Jalankan Composer install** (untuk mendapatkan dependensi PHP Laravel):
+
+   ```sh
+   composer install
+   ```
+
+2. **Ubah nama file `.env.example` menjadi `.env`**:
+
+   ```sh
+   mv .env.example .env
+   ```
+
+3. **Generate application key**:
+
+   ```sh
+   php artisan key:generate
+   ```
+
+4. **Jalankan migrasi database**:
+
+   ```sh
+   php artisan migrate
+   ```
+
+5. **Jalankan seeder untuk mengisi database awal**:
+   ```sh
+   php artisan db:seed
+   ```
