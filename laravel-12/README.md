@@ -123,7 +123,11 @@ untuk menjalankannya pastikan terminal /CMD berada pada project laravelnya lalu 
 php artisan migrate
 ```
 
+<<<<<<< HEAD
 ## 3. Menampilkan Data dari Database
+=======
+## 3.Menampilkan Data dari Database
+>>>>>>> b0a58e8a06b78d2c43ee6deb953c6f8d0329910d
 
 ### 3.1 Membuat Controller Product
 
@@ -220,6 +224,7 @@ dan untuk menampilkan pagination, bisa menggunakan `links`
 ```
 
 lalu jalankan dan tampilkan jangan lupa `php artisan serve` harus sudah aktif
+<<<<<<< HEAD
 
 ## 4. Insert Data ke Dalam Database
 
@@ -309,3 +314,5 @@ pada form yang sudah dibuat :
 ada action yang mengarahkan route ke method store, lalu ada enctype untuk inputan file, dan ada @csrf itu sebagai token yang harus ada ketika menginputan suatu request pada form. <br>
 
 #### dan selesai bisa dicoba
+=======
+>>>>>>> b0a58e8a06b78d2c43ee6deb953c6f8d0329910d
