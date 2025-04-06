@@ -1,4 +1,4 @@
-# Tutorila CRUD Laravel 12
+# Tutorial CRUD Laravel 12
 
 ## 1.Konfigurasi File System
 
@@ -88,7 +88,7 @@ public function up(): void
 
 pada file `app/Models/Product.php` ubah menjadi :
 
-```sh
+```php
 <?php
 
 namespace App\Models;
@@ -122,3 +122,101 @@ untuk menjalankannya pastikan terminal /CMD berada pada project laravelnya lalu 
 ```sh
 php artisan migrate
 ```
+
+## 3.Menampilkan Data dari Database
+
+### 3.1 Membuat Controller Product
+
+Controller berfungsi sebagai penghubung antara **Model**(database) dan **View**(tampilan antarmuka pengguna), langkahnya:
+
+1. Buat Controller menggunakan prompt
+
+```sh
+php artisan make:controller ProductController
+```
+
+2. pada `app/Http/Controllers/ProductController.php` buat kode ini
+
+```php
+<?php
+
+namespace App\Http\Controllers;
+
+//import model product
+use App\Models\Product;
+
+//import return type View
+use Illuminate\View\View;
+
+class ProductController extends Controller
+{
+    /**
+     * index
+     *
+     * @return void
+     */
+    public function index() : View
+    {
+        //get all products
+        $products = Product::latest()->paginate(10);
+
+        //render view with products
+        return view('products.index', compact('products'));
+    }
+}
+```
+
+### 3.2 Membuat Route Products
+
+silahkan buka `routes/web.php` lalu ubah kode jadi seperti ini:
+
+```php
+<?php
+
+use Illuminate\Support\Facades\Route;
+
+//import product controller
+use App\Http\Controllers\ProductController;
+
+//route resource for products
+Route::resource('/products', ProductController::class);
+
+Route::get('/', function () {
+    return view('welcome');
+});
+```
+
+hanya dengan 1 baris kode di atas, Laravel akan otomati membuat 7 route bawaan untuk **CRUD** produk. Untuk melihat daftar lengkap route yang dibuat, jalankan perintah ini di terminal/CMD.
+
+```sh
+php artisan route:list
+```
+
+![alt text](image-1.png)
+
+### 3.3 Membuat View Products Index
+
+buat file pada `resource/views/products/index.blade.php` kemudian masukan kode ini
+[index.blade.php](resources/views/products/index.blade.php)
+
+pada kode ada pengulangan menggunakan `@forelse`:
+
+```php
+@forelse ($products as $product)
+
+	//tampilkan data product.
+
+@empty
+
+	// data produk belum ada.
+
+@endforelse
+```
+
+dan untuk menampilkan pagination, bisa menggunakan `links`
+
+```php
+{{ $products->links() }}
+```
+
+lalu jalankan dan tampilkan jangan lupa `php artisan serve` harus sudah aktif
