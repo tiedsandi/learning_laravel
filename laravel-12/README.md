@@ -588,3 +588,58 @@ yang perlu diperhatikan di sini yaitu:
     @csrf
     @method('PUT')
 ```
+
+## 7. Delete Data dari Database
+
+### 7.1 Menambahkan method `destroy` di controller
+
+pada [Controller Product](app/Http/Controllers/ProductController.php) kita menambahkan function destroy
+
+```php
+public function destroy($id): RedirectResponse
+{
+
+	//...
+
+}
+```
+
+pertama cari product di database berdasarkan `$id`
+
+```php
+//get product by ID
+$product = Product::findOrFail($id);
+```
+
+kedua jika sudah, maka delete gambar
+
+```php
+//delete image
+Storage::delete('products/'. $product->image);
+```
+
+ketiga hapus data dari database
+
+```php
+//delete product
+$product->delete();
+```
+
+keempat redirect ke file `products.index` dengan memberikan session flash data
+
+```php
+//redirect to index
+return redirect()->route('products.index')->with(['success' => 'Data Berhasil Dihapus!']);
+```
+
+### 7.2 Menambahkan form delete pada `products.index`
+
+bungkus button delete pada `products.index` dengan tag form, lalu tambahkan confirm untuk konfirmasi, dan tambahkan `@method('DELETE')`
+
+```php
+<form onsubmit="return confirm('Apakah Anda Yakin ?');" action="{{ route('products.destroy', $product->id) }}" method="POST">
+    @csrf
+    @method('DELETE')
+    <button type="submit" class="btn btn-sm btn-danger">HAPUS</button>
+</form>
+```
