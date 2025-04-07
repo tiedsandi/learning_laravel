@@ -124,10 +124,14 @@ php artisan migrate
 ```
 
 <<<<<<< HEAD
+
 ## 3. Menampilkan Data dari Database
+
 =======
+
 ## 3.Menampilkan Data dari Database
->>>>>>> b0a58e8a06b78d2c43ee6deb953c6f8d0329910d
+
+> > > > > > > b0a58e8a06b78d2c43ee6deb953c6f8d0329910d
 
 ### 3.1 Membuat Controller Product
 
@@ -224,7 +228,6 @@ dan untuk menampilkan pagination, bisa menggunakan `links`
 ```
 
 lalu jalankan dan tampilkan jangan lupa `php artisan serve` harus sudah aktif
-<<<<<<< HEAD
 
 ## 4. Insert Data ke Dalam Database
 
@@ -256,7 +259,13 @@ $request->validate([
 penjelasannya: <br>
 ![alt text](image-3.png)
 
-untuk melakukan upload gambar menggunakna method `storeAs`
+untuk melakukan upload gambar menggunakna method `storeAs`, laravel akan:
+
+1. Cek apakah folder storage/app/public/products sudah ada.
+
+2. Kalau belum ada, otomatis bikin foldernya.
+
+3. Simpan file di dalamnya.
 
 ```php
 //upload image
@@ -311,8 +320,77 @@ pada form yang sudah dibuat :
 </form>
 ```
 
-ada action yang mengarahkan route ke method store, lalu ada enctype untuk inputan file, dan ada @csrf itu sebagai token yang harus ada ketika menginputan suatu request pada form. <br>
+ada action yang mengarahkan route ke method store, lalu ada enctype untuk inputan file, dan ada @csrf itu sebagai token yang harus ada ketika menginputan suatu request pada form, dan selesai bisa dicoba
 
-#### dan selesai bisa dicoba
-=======
->>>>>>> b0a58e8a06b78d2c43ee6deb953c6f8d0329910d
+## 5. Menampilkan Detail Data By ID
+
+### 5.1 Menambhakan method `show` di Controller
+
+[Controller Product](app/Http/Controllers/ProductController.php) setelah menambahkan method show yang menerima paramater `$id` pada controller:
+
+```php
+public function show(string $id): View
+{
+
+	//...
+
+}
+```
+
+langkah selanjutnya adalah:
+
+1. cari id product menggunakan method `findOrFail`
+
+```php
+//get product by ID
+$product = Product::findOrFail($id);
+```
+
+2. lalu mereturn `$product` ke halaman `products.show`
+
+```php
+//render view with product
+return view('products.show', compact('product'));
+```
+
+### 5.2 Membuat view detail pada product
+
+setelah membuat `show.blade.php` di `resource/views/products/`
+kurang lebih strukturnya seperti ini:
+
+```sh
+resources
+└── views
+    └── products
+        ├── index.blade.php
+        ├── create.blade.php
+        ├── show.blade.php  <-- (File yang akan kita buat)
+```
+
+[products.show](resources/views/products/show.blade.php)
+yang perlu diperhatikan di sini yaitu cara panggil image dan cara panggil atribut dari objek product yang sebelumnya sudah kita kirim dari kontroller cara panggilnya:
+
+1. Menampilkan gambar
+
+```php
+<img src="{{ asset('/storage/products/'.$product->image) }}" class="rounded" style="width: 100%">
+```
+
+2. Menampilkan atribut
+
+```php
+// menampilkan title
+{{ $product->title }}
+
+// menampilkan harga
+{{ "Rp " . number_format($product->price,2,',','.') }}
+
+// menampilkan description, karena description ada sintak html tambahkan `!!`
+{!! $product->description !!}
+
+// menampilkan stock
+{{ $product->stock }}
+
+```
+
+dan silahkan coba
