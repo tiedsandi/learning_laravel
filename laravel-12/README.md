@@ -127,12 +127,6 @@ php artisan migrate
 
 ## 3. Menampilkan Data dari Database
 
-=======
-
-## 3.Menampilkan Data dari Database
-
-> > > > > > > b0a58e8a06b78d2c43ee6deb953c6f8d0329910d
-
 ### 3.1 Membuat Controller Product
 
 Controller berfungsi sebagai penghubung antara **Model**(database) dan **View**(tampilan antarmuka pengguna), langkahnya:
@@ -172,6 +166,26 @@ class ProductController extends Controller
         return view('products.index', compact('products'));
     }
 }
+```
+
+dari kode di atas, pertama kita tentukan `namespace` atau lokasi conroller ini berada
+
+```php
+namespace App\Http\Controllers;
+```
+
+kemudian import Model `product`, dimana digunakan untuk mengambil data dari table `products` di database.
+
+```php
+//import model product
+use App\Models\Product;
+```
+
+selanjutnya import class `view` yang nanti digunakan sebagai tipe pengembalian untuk method `index`
+
+```php
+//import return type View
+use Illuminate\View\View;
 ```
 
 ### 3.2 Membuat Route Products
@@ -236,11 +250,25 @@ lalu jalankan dan tampilkan jangan lupa `php artisan serve` harus sudah aktif
 [Controller Product](app/Http/Controllers/ProductController.php) setelah menambahkan method create dan store yang digunakan untuk: <br>
 ![alt text](image-2.png)
 
-#### Method Create
+dari kode di atas, pertama kita import return type `RedirectResponse`
+
+```php
+//import return type redirectResponse
+use Illuminate\Http\RedirectResponse;
+```
+
+kemudian kita import juga `Http Request`
+
+```php
+//import Http Request
+use Illuminate\Http\Request;
+```
+
+#### Function Create
 
 hanya mereturn sebuah view pada file `resource/views/products/create.blade.php`
 
-#### Method Store
+#### Function Store
 
 di sini kita menerima inputan ditangkap menggunakan sebuah `Reques: $request`
 lalu ditambahkan sebuah validasi input:
@@ -324,7 +352,7 @@ ada action yang mengarahkan route ke method store, lalu ada enctype untuk inputa
 
 ## 5. Menampilkan Detail Data By ID
 
-### 5.1 Menambhakan method `show` di Controller
+### 5.1 Menambahkan method `show` di Controller
 
 [Controller Product](app/Http/Controllers/ProductController.php) setelah menambahkan method show yang menerima paramater `$id` pada controller:
 
@@ -351,6 +379,12 @@ $product = Product::findOrFail($id);
 ```php
 //render view with product
 return view('products.show', compact('product'));
+```
+
+untuk mengirimkan `$id` dari halaman `products.inde` caranya:
+
+```php
+<a href="{{ route('products.show', $product->id) }}" class="btn btn-sm btn-dark">SHOW</a>
 ```
 
 ### 5.2 Membuat view detail pada product
@@ -394,3 +428,163 @@ yang perlu diperhatikan di sini yaitu cara panggil image dan cara panggil atribu
 ```
 
 dan silahkan coba
+
+## 6. Edit dan Update Data ke Database
+
+### 6.1 Membuat Method `edit` dan `update` di controller
+
+[Controller Product](app/Http/Controllers/ProductController.php) setelah menambahkan method edit dan update yang digunakan untuk: <br>
+![alt text](image-5.png)
+
+pada kode di atas kita mengimport Facades `Storage` dari laravel, yang digunakan untuk menghapus file gambar product lama saat gambar diperbarui.
+
+```php
+//import Facades Storage
+use Illuminate\Support\Facades\Storage;
+```
+
+#### Function Edit
+
+untuk mengirimkan `$id` dari index caranya:
+
+```php
+<a href="{{ route('products.edit', $product->id) }}" class="btn btn-sm btn-primary">EDIT</a>
+```
+
+pada `app/Http/Controllers/ProductController.php`, menambahkan fungsi untuk method edit
+
+```php
+public function edit(string $id): View
+{
+
+	//...
+
+}
+```
+
+lalu cari data di database berdasarkan id
+
+```php
+//get product by ID
+$product = Product::findOrFail($id);
+```
+
+dan tinggal kirim ke dalam view menggunakan `compact`
+
+```php
+//render view with product
+return view('products.edit', compact('product'));
+```
+
+#### Function Store
+
+Di dalam method ini terdapat 2 paramater, yaitu `$request` dan `$id`
+
+1. `$request` digunakan untuk menerima inputan / request data yang dikirimkan oleh pengguna melalui form
+2. `$id` merupakan **ID** data product yang akan dijadikan acuan update data
+
+```php
+public function update(Request $request, $id): RedirectResponse
+{
+
+	//...
+
+}
+```
+
+di dalam method di atas, pertama kita membuat sebuah validasi terlebih dahulu:
+
+```php
+//validate form
+$request->validate([
+    'image'         => 'image|mimes:jpeg,jpg,png|max:2048',
+    'title'         => 'required|min:5',
+    'description'   => 'required|min:10',
+    'price'         => 'required|numeric',
+    'stock'         => 'required|numeric'
+]);
+```
+
+selanjutnya get data product dari database berdasarkan `$id`
+
+```php
+//get product by ID
+$product = Product::findOrFail($id);
+```
+
+kemudian membuat kondisi untuk gambar, jika ada sebuah request file dengan nama `image`, maka upload gambar baru dan hapus gambar lama
+
+```php
+//check if image is uploaded
+if ($request->hasFile('image')) {
+
+	//hapus gambar lama
+    Storage::delete('products/'.$product->image);
+
+	//upload gambar baru
+    $image = $request->file('image');
+    $image->storeAs('products', $image->hashName());
+
+	//update dengan gambar
+    $product->update([
+    'image'         => $image->hashName(),
+    'title'         => $request->title,
+    'description'   => $request->description,
+    'price'         => $request->price,
+    'stock'         => $request->stock
+]);
+
+} else {
+
+	//update tanpa gambar
+    $product->update([
+        'title'         => $request->title,
+        'description'   => $request->description,
+        'price'         => $request->price,
+        'stock'         => $request->stock
+    ]);
+}
+```
+
+dan yang terakhir tinggal redirect ke dalam sebuah route dengan nama `products.index` dengan menambahkan flash data.
+
+```php
+//redirect to index
+return redirect()->route('products.index')->with(['success' => 'Data Berhasil Diubah!']);
+```
+
+### 6.2 Membuat View Form Edit Data
+
+setelah membuat `edit.blade.php` di `resource/views/products/`
+kurang lebih strukturnya seperti ini:
+
+```sh
+resources
+└── views
+    └── products
+        ├── index.blade.php
+        ├──	create.blade.php
+        ├── show.blade.php
+        ├── edit.blade.php <-- (File yang akan kita buat)
+```
+
+[products.edit](resources/views/products/edit.blade.php)
+yang perlu diperhatikan di sini yaitu:
+
+1. Untuk mengisi value kita panggil object dari data product di dalam helper `old`, contohnya:
+
+```php
+{{ old('title', $product->title) }}
+```
+
+```php
+<input type="text" class="form-control @error('title') is-invalid @enderror" name="title" value="{{ old('title', $product->title) }}" placeholder="Masukkan Judul Product">
+```
+
+2. jangan lupa, untuk halaman form edit, pastikan untuk menambahkan method `put` di dalamnya, ini menandakan bahwa form tersebut adalah form edit data.
+
+```php
+<form action="{{ route('products.update', $product->id) }}" method="POST" enctype="multipart/form-data">
+    @csrf
+    @method('PUT')
+```
