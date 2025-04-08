@@ -75,7 +75,9 @@ class ProductController extends Controller
      */
     public function edit(string $id)
     {
-        //
+        $edit = Products::findOrFail($id);
+        $categories = Categories::orderBy('category_name', 'asc')->get();
+        return view('products.edit', compact('edit', 'categories'));
     }
 
     /**
@@ -83,7 +85,34 @@ class ProductController extends Controller
      */
     public function update(Request $request, string $id)
     {
-        //
+        $request->validate([
+            'product_name' => 'required',
+            'category_id' => 'required',
+            'product_price' => 'required|numeric',
+            'is_active' => 'required|boolean',
+            'product_description' => '',
+        ]);
+
+        $data = [
+            'product_name' => $request->product_name,
+            'category_id' => $request->category_id,
+            'product_price' => $request->product_price,
+            'product_description' => $request->product_description,
+            'is_active' => $request->is_active,
+        ];
+        $product = Products::findOrFail($id);
+
+        if ($request->hasFile('photo')) {
+            if ($product->product_photo) {
+                File::delete(public_path('storage/' . $product->product_photo));
+            }
+
+            $photo = $request->file('photo')->store('products', 'public');
+            $data['product_photo'] = $photo;
+        }
+
+        $product->update($data);
+        return redirect()->to('product')->with('success', 'Product updated successfully.');
     }
 
     /**

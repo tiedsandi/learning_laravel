@@ -38,9 +38,9 @@
                   </td>
                   <td>
                     @if($data->product_photo)
-                    <img src="{{asset('storage/'.$data->product_photo)}}" alt="" width="100px" height="100px">
+                    <img src="{{asset('storage/'.$data->product_photo)}}" alt="" width="100px" height="100px" style="object-fit:contain">
                     @else
-                    <img src="{{asset('images/no-image.png')}}" alt="" width="100px" height="100px">
+                    <img src="{{asset('images/no-image.png')}}" alt="" width="100px" height="100px" style="object-fit:contain">
                     @endif
                   </td>
                   <td>{{$data->cate->category_name}}</td>
