@@ -39,17 +39,18 @@
 </head>
 
 <body>
+  @include('sweetalert::alert')
 
   @include('layouts.inc.header')
   @include('layouts.inc.sidebar')
 
-  
+
 
   <main id="main" class="main">
 
     <div class="pagetitle">
       <h1>
-         @yield('title')
+        @yield('title')
       </h1>
       <nav>
         <ol class="breadcrumb">
@@ -62,7 +63,7 @@
 
     @yield('content')
 
-    
+
   </main><!-- End #main -->
 
   <!-- ======= Footer ======= -->
@@ -93,6 +94,9 @@
 
   <!-- Template Main JS File -->
   <script src="{{asset('assets/js/main.js')}}"></script>
+
+  @include('sweetalert::alert', ['cdn' => "https://cdn.jsdelivr.net/npm/sweetalert2@9"])
+
 
 </body>
 

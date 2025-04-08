@@ -7,7 +7,8 @@ use Illuminate\Support\Facades\File;
 
 use App\Models\Products;
 use App\Models\Categories;
-use App\Models\Product;
+use RealRashid\SweetAlert\Facades\Alert;
+
 
 class ProductController extends Controller
 {
@@ -112,7 +113,12 @@ class ProductController extends Controller
         }
 
         $product->update($data);
-        return redirect()->to('product')->with('success', 'Product updated successfully.');
+        // Alert::alert('Title', 'Message', 'Type');
+        // Alert::warning('Warning Title', 'Warning Message');
+        Alert::success('Success Title', 'Success Message');
+
+        // Alert::toast('Sucess', 'Edit Sucessfully');
+        return redirect()->to('product');
     }
 
     /**
