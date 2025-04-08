@@ -123,8 +123,6 @@ untuk menjalankannya pastikan terminal /CMD berada pada project laravelnya lalu 
 php artisan migrate
 ```
 
-<<<<<<< HEAD
-
 ## 3. Menampilkan Data dari Database
 
 ### 3.1 Membuat Controller Product
