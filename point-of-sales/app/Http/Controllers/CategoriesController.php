@@ -14,7 +14,7 @@ class CategoriesController extends Controller
     {
         $title = "Data Categories dari controller";
         $datas = Categories::get();
-        return view('categories.index',compact('title','datas'));
+        return view('categories.index', compact('title', 'datas'));
     }
 
     /**
@@ -31,7 +31,8 @@ class CategoriesController extends Controller
     public function store(Request $request)
     {
         Categories::create([
-            'category_name'=> $request->category_name,
+            'category_name' => $request->category_name,
+            'is_active' => $request->is_active,
         ]);
 
         return redirect()->to('categories');
@@ -51,7 +52,7 @@ class CategoriesController extends Controller
     public function edit(string $id)
     {
         $edit =  Categories::findorFail($id); // find, findorfail, where
-        return view('categories.edit',compact('edit'));
+        return view('categories.edit', compact('edit'));
     }
 
     /**
@@ -64,7 +65,8 @@ class CategoriesController extends Controller
         // ]);
 
         $category = Categories::find($id);
-        $category->category_name= $request->category_name;
+        $category->category_name = $request->category_name;
+        $category->is_active = $request->is_active;
         $category->save();
 
         return redirect()->to('categories');
@@ -76,7 +78,7 @@ class CategoriesController extends Controller
     public function destroy(string $id)
     {
         // Categories::where('id',$id)->delet();
-        $category= Categories::find($id);
+        $category = Categories::find($id);
         $category->delete();
         return redirect()->to('categories');
     }

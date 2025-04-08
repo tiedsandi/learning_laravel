@@ -1,7 +1,5 @@
 @extends('layouts.main')
-@section('title','Data Categories')
-@section('subTitle','sub cate')
-@section('litleTitle','litle title')
+@section('title','Data Produk')
 
 @section('content')
 <section class="section">
@@ -16,13 +14,16 @@
 
           <div class="mt-4 mb-3">
             <div align='right' class="mb-3">
-              <a href="{{route('categories.create')}}" class="btn btn-primary">Add Categories</a>
+              <a href="{{route('product.create')}}" class="btn btn-primary">Add Product</a>
             </div>
             <table class="table table-bordered">
               <thead>
                 <tr>
                   <th>No</th>
-                  <th>Name</th>
+                  <th>Foto</th>
+                  <th>Nama Kategori</th>
+                  <th>Nama Produk</th>
+                  <th>Harga</th>
                   <th>Status</th>
                   <th>Actions</th>
                 </tr>
@@ -35,19 +36,25 @@
                     <!-- {{$index +=1}} -->
                     {{$no ++}}
                   </td>
-                  <td>{{$data->category_name}}</td>
                   <td>
-                    @if($data->is_active == 1)
-                    <span class="badge bg-success">Active</span>
+                    @if($data->product_photo)
+                    <img src="{{asset('storage/'.$data->product_photo)}}" alt="" width="100px" height="100px">
                     @else
-                    <span class="badge bg-danger">Inactive</span>
+                    <img src="{{asset('images/no-image.png')}}" alt="" width="100px" height="100px">
                     @endif
                   </td>
+                  <td>{{$data->cate->category_name}}</td>
+                  <td>{{$data->product_name}}</td>
+                  <td>{{$data->product_price}}</td>
                   <td>
-                    <a href="{{route('categories.edit', $data->id)}}" class="btn btn-sm btn-secondary">
+                    {{
+                      $data->is_active ? 'Publish' : 'Draft'
+                    }}
+                  <td>
+                    <a href="{{route('product.edit', $data->id)}}" class="btn btn-sm btn-secondary">
                       <i class="bi bi-pencil"></i>
                     </a>
-                    <form onsubmit="return confirm('Apakah Anda Yakin ?');" class='d-inline' action="{{route('categories.destroy', $data->id)}}" method="post">
+                    <form onsubmit="return confirm('Apakah Anda Yakin ?');" class='d-inline' action="{{route('product.destroy', $data->id)}}" method="post">
                       @csrf
                       @method('delete')
                       <button type="submit" class="btn btn-sm btn-warning">

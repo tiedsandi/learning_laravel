@@ -14,4 +14,9 @@ class Products extends Model
         'product_description',
         'is_active'
     ];
+
+    public function cate()
+    {
+        return $this->belongsTo(Categories::class, 'category_id', 'id');
+    }
 }
