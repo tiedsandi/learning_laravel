@@ -6,6 +6,7 @@ use App\Http\Controllers\LoginController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\CategoriesController;
 use App\Http\Controllers\ProductController;
+use App\Http\Controllers\TransactionController;
 use App\Http\Controllers\UsersController;
 
 Route::get('/', function () {
@@ -36,4 +37,7 @@ Route::resource('user', UsersController::class);
 
 Route::group(['middleware' => 'auth'], function () {
     Route::resource('product', ProductController::class);
+    Route::resource('pos', TransactionController::class);
 });
+
+Route::get('get-product/{id}', [TransactionController::class, 'getProduct']);

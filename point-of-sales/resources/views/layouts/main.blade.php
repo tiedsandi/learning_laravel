@@ -94,8 +94,81 @@
 
   <!-- Template Main JS File -->
   <script src="{{asset('assets/js/main.js')}}"></script>
-
   @include('sweetalert::alert', ['cdn' => "https://cdn.jsdelivr.net/npm/sweetalert2@9"])
+
+  
+  
+  <script src="{{asset('assets/js/jquery-3.7.1.min.js')}}"></script>
+
+  <script>
+    $('#category_id').change(function(){
+      let cat_id = $(this).val(), option = '<option value="">Select Product</option>';
+      
+      $.ajax({
+        url: '/get-product/' + cat_id,
+        type: 'GET',
+        dataType: 'json',
+        success: function(data) {
+          $.each(data.data, function(index,value){
+            option += `<option value="${value.id}" data-img="${value.product_photo}" data-price="${value.product_price}">${value.product_name}</option>`;
+          })
+          $('#product_id').html(option);
+        },
+        error: function(xhr, status, error) {
+          console.error('Error fetching subcategories:', error);
+        }
+      });
+    })
+
+    $(".add-row").click(function(){
+      let tbody = $('tbody')
+      let selectedOption = $('#product_id').find('option:selected');
+      let namaProduk = selectedOption.text();
+      let gambarProduk = selectedOption.data('img');
+      let hargaProduk = selectedOption.data('price');
+
+      if($('#category_id').val()==""){
+        alert('Category required');
+        return false;
+      }
+
+      if($('#product_id').val()==""){
+        alert('Product required');
+        return false;
+      }
+
+      let newRow = "<tr>";
+        newRow += `<td><img src="{{asset('storage/')}}/${gambarProduk}" alt="ini gambar"></td>`
+        newRow += `<td>${namaProduk}</td>`
+        newRow += `<td>Qty</td>`
+        newRow += `<td>${hargaProduk}</td>`
+        newRow += `</tr>`
+
+        tbody.append(newRow);
+    })
+
+    // $('#category_id').change(function(){
+    //   let cat_id = $(this).val();
+    //   // Reset the #product_id dropdown
+    //   $('#product_id').empty().append('<option value="">Select Product</option>');
+      
+    //   if (cat_id) {
+    //   $.ajax({
+    //     url: '/get-product/' + cat_id,
+    //     type: 'GET',
+    //     dataType: 'json',
+    //     success: function(data) {
+    //     $.each(data.data, function(index, value){
+    //       $('#product_id').append(`<option value='${value.id}'>${value.product_name}</option>`);
+    //     });
+    //     },
+    //     error: function(xhr, status, error) {
+    //     console.error('Error fetching products:', error);
+    //     }
+    //   });
+    //   }
+    // });
+  </script>
 
 
 </body>
