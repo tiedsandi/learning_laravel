@@ -13,7 +13,7 @@ class UsersController extends Controller
     public function index()
     {
         $datas = User::get();
-        return view('users.index',compact('datas'));
+        return view('users.index', compact('datas'));
     }
 
     /**
@@ -30,9 +30,9 @@ class UsersController extends Controller
     public function store(Request $request)
     {
         User::create([
-            'name'=> $request->name,
-            'email'=> $request->email,
-            'password'=> $request->password,
+            'name' => $request->name,
+            'email' => $request->email,
+            'password' => $request->password,
         ]);
 
         return redirect()->to('user');
@@ -52,7 +52,7 @@ class UsersController extends Controller
     public function edit(string $id)
     {
         $edit =  User::findorFail($id); // find, findorfail, where
-        return view('users.edit',compact('edit'));
+        return view('users.edit', compact('edit'));
     }
 
     /**
@@ -61,20 +61,22 @@ class UsersController extends Controller
     public function update(Request $request, string $id)
     {
         $user = User::find($id);
-        $user->name= $request->name;
-        $user->email= $request->email;
-        $user->password= $request->password ?? $user->password ;
+        $user->name = $request->name;
+        $user->email = $request->email;
+        $user->password = $request->password ?? $user->password;
         $user->save();
 
         return redirect()->to('user');
     }
-    
+
 
     /**
      * Remove the specified resource from storage.
      */
     public function destroy(string $id)
     {
-        //
+        $user = User::find($id);
+        $user->delete();
+        return redirect()->to('user');
     }
 }
