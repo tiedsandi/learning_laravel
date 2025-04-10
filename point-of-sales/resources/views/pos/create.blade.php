@@ -51,20 +51,16 @@
                 <th>Product</th>
                 <th>Qty</th>
                 <th>Price</th>
+                <th>SubTotal</th>
               </tr>
             </thead>
             <tbody></tbody>
             <tfoot>
               <tr>
-                <th colspan="2">Subtotal</th>
-                <td colspan="2">
-                  <input type="number" class="form-control">
-                </td>
-              </tr>
-              <tr>
-                <th colspan="2">Grand Total</th>
-                <td colspan="2">
-                  <input type="number" class="form-control">
+                <th colspan="4">Grand Total</th>
+                <td >
+                  <span class="grandtotal"></span>
+                  <input type="hidden" name="grandtotal" class=" form-control">
                 </td>
               </tr>
             </tfoot>

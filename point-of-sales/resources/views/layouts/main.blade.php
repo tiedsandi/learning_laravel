@@ -106,6 +106,7 @@
       return new Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR' }).format(num);
     }
 
+
     $('#category_id').change(function(){
       let cat_id = $(this).val(), option = '<option value="">Select Product</option>';
       
@@ -130,7 +131,7 @@
       let selectedOption = $('#product_id').find('option:selected');
       let namaProduk = selectedOption.text();
       let gambarProduk = selectedOption.data('img');
-      let hargaProduk = selectedOption.data('price');
+      let hargaProduk =  parseInt(selectedOption.data('price'));
 
       if($('#category_id').val()==""){
         alert('Category required');
@@ -143,14 +144,47 @@
       }
 
       let newRow = "<tr>";
-        newRow += `<td><img src="{{asset('storage/')}}/${gambarProduk}" alt="ini gambar"></td>`
+        newRow += `<td><img width="110px" src="{{asset('storage/')}}/${gambarProduk}" alt="ini gambar"></td>`
         newRow += `<td>${namaProduk}</td>`
-        newRow += `<td><input type="number" value="1"></td>`
-        newRow += `<td>${formatRupiah(hargaProduk)}</td>`
+        newRow += `<td><input  type="number" value="1" name="qty[]" class="qty form-control"></td>`
+        newRow += `<td><span class="price" data-price=${hargaProduk}>${formatRupiah(hargaProduk)}</span></td>`
+        newRow += `<td><span class="subtotal">${formatRupiah(hargaProduk)}</span><td>`
         newRow += `</tr>`
 
         tbody.append(newRow);
+
+
+        sumSubTotal();
+        clearAll();
+
+        $('.qty').on('input',function(){
+          let row = $(this).closest('tr');
+          let qty = parseInt($(this).val()) || 0;
+          let price = parseInt(row.find('.price').data('price')) || 0;
+          let total = formatRupiah(price * qty)
+          row.find('.subtotal').text(total);
+          sumSubTotal();
+        })
     })
+
+    function sumSubTotal(){
+      let grandtotal = 0;
+
+      $('.subtotal').each(function(){
+        let total = $(this).text().split(',');
+        
+        let valueWithoutRp = parseInt(total[0].replace('Rp', '').replace(/\./g, '').trim());        
+        
+        grandtotal += valueWithoutRp;
+      })
+      
+      $('.grandtotal').text(formatRupiah(grandtotal));
+    }
+
+    function clearAll(){
+      $('#category_id').val("");
+      $('#product_id').val("");
+    }
 
     // $('#category_id').change(function(){
     //   let cat_id = $(this).val();
