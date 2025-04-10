@@ -101,6 +101,11 @@
   <script src="{{asset('assets/js/jquery-3.7.1.min.js')}}"></script>
 
   <script>
+
+    function formatRupiah(num){
+      return new Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR' }).format(num);
+    }
+
     $('#category_id').change(function(){
       let cat_id = $(this).val(), option = '<option value="">Select Product</option>';
       
@@ -140,8 +145,8 @@
       let newRow = "<tr>";
         newRow += `<td><img src="{{asset('storage/')}}/${gambarProduk}" alt="ini gambar"></td>`
         newRow += `<td>${namaProduk}</td>`
-        newRow += `<td>Qty</td>`
-        newRow += `<td>${hargaProduk}</td>`
+        newRow += `<td><input type="number" value="1"></td>`
+        newRow += `<td>${formatRupiah(hargaProduk)}</td>`
         newRow += `</tr>`
 
         tbody.append(newRow);
