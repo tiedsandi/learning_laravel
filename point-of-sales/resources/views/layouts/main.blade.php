@@ -130,6 +130,7 @@
       let tbody = $('tbody')
       let selectedOption = $('#product_id').find('option:selected');
       let namaProduk = selectedOption.text();
+      let productId = selectedOption.val();
       let gambarProduk = selectedOption.data('img');
       let hargaProduk =  parseInt(selectedOption.data('price'));
 
@@ -145,10 +146,16 @@
 
       let newRow = "<tr>";
         newRow += `<td><img width="110px" src="{{asset('storage/')}}/${gambarProduk}" alt="ini gambar"></td>`
-        newRow += `<td>${namaProduk}</td>`
-        newRow += `<td><input  type="number" value="1" name="qty[]" class="qty form-control"></td>`
-        newRow += `<td><span class="price" data-price=${hargaProduk}>${formatRupiah(hargaProduk)}</span></td>`
-        newRow += `<td><span class="subtotal">${formatRupiah(hargaProduk)}</span><td>`
+        newRow += `<td>${namaProduk} <input type="hidden"name="product_id[]" value="${productId}" ></td>`
+        newRow += `<td><input type="number" value="1" name="qty[]" class="qty form-control"></td>`
+        newRow += `<td>
+                    <input type="hidden" name="order_price[]" value="${hargaProduk}" >
+                    <span class="price" data-price=${hargaProduk}>${formatRupiah(hargaProduk)}</span>
+                  </td>`
+        newRow += `<td>
+                    <input class="subtotal_input" type="hidden" name="order_subtotal[]" value="${hargaProduk}">
+                    <span class="subtotal">${formatRupiah(hargaProduk)}</span>
+                  <td>`
         newRow += `</tr>`
 
         tbody.append(newRow);
@@ -161,8 +168,9 @@
           let row = $(this).closest('tr');
           let qty = parseInt($(this).val()) || 0;
           let price = parseInt(row.find('.price').data('price')) || 0;
-          let total = formatRupiah(price * qty)
-          row.find('.subtotal').text(total);
+          let total = price * qty
+          row.find('.subtotal').text(formatRupiah(total));
+          row.find('.subtotal_input').val(total);
           sumSubTotal();
         })
     })
@@ -172,13 +180,12 @@
 
       $('.subtotal').each(function(){
         let total = $(this).text().split(',');
-        
         let valueWithoutRp = parseInt(total[0].replace('Rp', '').replace(/\./g, '').trim());        
-        
         grandtotal += valueWithoutRp;
       })
       
       $('.grandtotal').text(formatRupiah(grandtotal));
+      $('input[name="grandTotal"]').val(grandtotal);
     }
 
     function clearAll(){

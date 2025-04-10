@@ -3,9 +3,11 @@
 namespace App\Http\Controllers;
 
 use App\Models\Categories;
+use App\Models\orderDetails;
 use App\Models\Orders;
 use App\Models\Products;
 use Illuminate\Http\Request;
+use RealRashid\SweetAlert\Facades\Alert;
 
 class TransactionController extends Controller
 {
@@ -33,7 +35,33 @@ class TransactionController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $qOrderCode = Orders::max('id');
+        $qOrderCode++;
+        $orderCode = "ORD" . date('dmY') . sprintf("%03d", $qOrderCode);
+
+        $data = [
+            'order_code' => $orderCode,
+            'order_date' => date("Y-m-d"),
+            'order_amount' => $request->grandTotal,
+            'order_change' => 1,
+            'order_status' => 1,
+        ];
+
+        $order = Orders::create($data);
+
+        $qty = $request->qty;
+        foreach ($qty as $key => $quantity) {
+            orderDetails::create([
+                'order_id' => $order->id,
+                'product_id' => $request->product_id[$key],
+                'qty' => $request->qty[$key],
+                'order_price' => $request->order_price[$key],
+                'order_subtotal' => $request->order_subtotal[$key],
+            ]);
+        }
+
+        Alert::success('Order Created Successfully', 'The order has been created successfully.');
+        return redirect()->to('pos');
     }
 
     /**
