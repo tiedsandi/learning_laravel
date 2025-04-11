@@ -41,3 +41,5 @@ Route::group(['middleware' => 'auth'], function () {
 });
 
 Route::get('get-product/{id}', [TransactionController::class, 'getProduct']);
+
+Route::get('print/{id}', [TransactionController::class, 'print'])->name('print');

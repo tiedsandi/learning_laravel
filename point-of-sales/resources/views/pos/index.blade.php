@@ -46,7 +46,7 @@
                     <a href="{{route('pos.show', $data->id)}}" class="btn btn-sm btn-secondary">
                       <i class="bi bi-eye"></i>
                     </a>
-                    <a href="{{route('pos.edit', $data->id)}}" class="btn btn-sm btn-success">
+                    <a href="{{route('print', $data->id)}}" class="btn btn-sm btn-success">
                       <i class="bi bi-printer"></i>
                     </a>
                   </td>

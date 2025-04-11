@@ -106,4 +106,12 @@ class TransactionController extends Controller
         $response = ['status' => 'success', 'message' => 'Fetch product success', 'data' => $products];
         return response()->json($response, 200);
     }
+
+    public function print($id)
+    {
+        $order = Orders::findorFail($id);
+        $orderDetails = orderDetails::with('product')->where('order_id', $id)->get();
+
+        return view('pos.print-struk', compact('order', 'orderDetails'));
+    }
 }

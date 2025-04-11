@@ -9,7 +9,7 @@
           <h3>{{$title ?? ""}}</h3>
           <div>
             <a href="{{url()->previous()}}" class="btn btn-primary">Back</a>
-            <a href="#" class="btn btn-success">
+            <a href="{{route('print', $order->id)}}" class="btn btn-success">
               <i class="bi bi-printer"></i>
             </a>
           </div>
