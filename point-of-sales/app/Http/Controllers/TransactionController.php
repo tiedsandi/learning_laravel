@@ -16,7 +16,7 @@ class TransactionController extends Controller
      */
     public function index()
     {
-        $datas = Orders::orderBy('id', 'desc')->get();
+        $datas = orderDetails::with('order')->orderBy('id', 'desc')->get();
         // return $datas;
         return view('pos.index', compact('datas'));
     }
@@ -69,7 +69,11 @@ class TransactionController extends Controller
      */
     public function show(string $id)
     {
-        //
+        $order = Orders::findorFail($id);
+        $orderDetails = orderDetails::with('product')->where('order_id', $id)->get();
+        // return $orderDetails;
+        $title = "Order Details Of " . $order->order_code;
+        return view('pos.show', compact('order', 'orderDetails', 'title'));
     }
 
     /**

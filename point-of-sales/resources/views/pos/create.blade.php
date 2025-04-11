@@ -56,7 +56,7 @@
                     <th colspan="4">Grand Total</th>
                     <td >
                       <span class="grandtotal"></span>
-                      <input type="text" name="grandTotal" class="form-control">
+                      <input type="hidden" name="grandTotal" class="form-control">
                     </td>
                   </tr>
                 </tfoot>

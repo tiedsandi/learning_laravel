@@ -106,6 +106,14 @@
       return new Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR' }).format(num);
     }
 
+    $(document).ready(function() {
+      $('.rupiah-format').each(function() {
+          var value = parseFloat($(this).text());
+          if (!isNaN(value)) {
+              $(this).text(formatRupiah(value));
+          }
+      });
+    });
 
     $('#category_id').change(function(){
       let cat_id = $(this).val(), option = '<option value="">Select Product</option>';

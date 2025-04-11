@@ -9,10 +9,26 @@
       <div class="card">
         <div class="card-body">
           <h3 class="card-title">{{$title ?? 'Data'}}</h3>
-          <!-- <h5 class="card-title">{{$subTitle ?? 'sub-Data'}}</h5>
-            <h6 class="card-title">@yield('litleTitle')</h6> -->
 
           <div class="mt-4 mb-3">
+            <div class="row mb-3">
+              <div class="col-md-6">
+                <form method="GET" action="{{ route('product.index') }}">
+                  <div class="input-group">
+                    <select name="category_filter" class="form-select">
+                      <option value="">-- Filter by Category --</option>
+                      @foreach($categories as $category)
+                      <option value="{{ $category->id }}" {{ request('category_filter') == $category->id ? 'selected' : '' }}>
+                        {{ $category->category_name }}
+                      </option>
+                      @endforeach
+                    </select>
+                    <button type="submit" class="btn btn-primary">Filter</button>
+                  </div>
+                </form>
+              </div>
+            </div>
+
             <div align='right' class="mb-3">
               <a href="{{route('product.create')}}" class="btn btn-primary">Add Product</a>
             </div>
@@ -33,7 +49,6 @@
                 @foreach($datas as $index => $data)
                 <tr>
                   <td>
-                    <!-- {{$index +=1}} -->
                     {{$no ++}}
                   </td>
                   <td>
@@ -44,21 +59,6 @@
                     @endif
                   </td>
                   <td>{{$data->cate->category_name}}</td>
-                  <td>{{$data->product_name}}</td>
-                  <td>{{$data->product_price}}</td>
-                  <td>
-                    {{
-                      $data->is_active ? 'Publish' : 'Draft'
-                    }}
-                  <td>
-                    <a href="{{route('product.edit', $data->id)}}" class="btn btn-sm btn-secondary">
-                      <i class="bi bi-pencil"></i>
-                    </a>
-                    <form onsubmit="return confirm('Apakah Anda Yakin ?');" class='d-inline' action="{{route('product.destroy', $data->id)}}" method="post">
-                      @csrf
-                      @method('delete')
-                      <button type="submit" class="btn btn-sm btn-warning">
-                        <i class="bi bi-trash"></i>
                       </button>
                     </form>
                   </td>

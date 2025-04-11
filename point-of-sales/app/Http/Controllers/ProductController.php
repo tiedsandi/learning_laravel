@@ -15,11 +15,18 @@ class ProductController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
-        $datas = Products::with('cate')->get();
-        // return $datas;
-        return view('products.index', compact('datas'));
+        $query = Products::with('cate');
+
+        if ($request->has('category_filter') && $request->category_filter != '') {
+            $query->where('category_id', $request->category_filter);
+        }
+
+        $datas = $query->get();
+        $categories = Categories::get();
+
+        return view('products.index', compact('datas', 'categories'));
     }
 
     /**

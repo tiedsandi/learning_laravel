@@ -35,19 +35,19 @@
                     <!-- {{$index +=1}} -->
                     {{$no ++}}
                   </td>
-                  {{-- <td>{{$data->cate->order_code}}</td>
-                  <td>{{$data->cate->order_date}}</td> --}}
-                  <td>{{$data->order_amount}}</td>
+                  <td>{{$data->order->order_code}}</td>
+                  <td>{{$data->order->order_date}}</td>
+                  <td>{{$data->order->order_amount}}</td>
                   <td>
                     {{
-                      $data->order_status ? 'Paid' : 'Unpaid'
+                      $data->order->order_status ? 'Paid' : 'Unpaid'
                     }}
                   <td>
                     <a href="{{route('pos.show', $data->id)}}" class="btn btn-sm btn-secondary">
-                      <i class="bi bi-detail"></i>
+                      <i class="bi bi-eye"></i>
                     </a>
                     <a href="{{route('pos.edit', $data->id)}}" class="btn btn-sm btn-success">
-                      <i class="bi bi-print"></i>
+                      <i class="bi bi-printer"></i>
                     </a>
                   </td>
                 </tr>
