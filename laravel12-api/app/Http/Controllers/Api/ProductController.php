@@ -85,9 +85,15 @@ class ProductController extends Controller
         //find product by ID
         $product = Product::find($id);
 
+        //check if product exists
+        if (!$product) {
+            return new ProductResource(false, 'Product not found!', null);
+        }
+
         //return single product as a resource
         return new ProductResource(true, 'Detail Data Product!', $product);
     }
+
 
     /**
      * update
@@ -114,6 +120,11 @@ class ProductController extends Controller
 
         //find product by ID
         $product = Product::find($id);
+
+        //check if product exists
+        if (!$product) {
+            return new ProductResource(false, 'Product not found!', null);
+        }
 
         //check if image is not empty
         if ($request->hasFile('image')) {
@@ -146,5 +157,32 @@ class ProductController extends Controller
 
         //return response
         return new ProductResource(true, 'Data Product Berhasil Diubah!', $product);
+    }
+
+
+    /**
+     * destroy
+     *
+     * @param  mixed $id
+     * @return void
+     */
+    public function destroy($id)
+    {
+        //find product by ID
+        $product = Product::find($id);
+
+        //check if product exists
+        if (!$product) {
+            return new ProductResource(false, 'Product not found!', null);
+        }
+
+        //delete image
+        Storage::delete('products/' . basename($product->image));
+
+        //delete product
+        $product->delete();
+
+        //return response
+        return new ProductResource(true, 'Data Product Berhasil Dihapus!', null);
     }
 }
