@@ -70,4 +70,24 @@ class ProductController extends Controller
         //return response
         return new ProductResource(true, 'Data Product Berhasil Ditambahkan!', $product);
     }
+
+    /**
+     * show
+     *
+     * @param  mixed $id
+     * @return void
+     */
+    public function show($id)
+    {
+        //find product by ID
+        $product = Product::find($id);
+
+        //check if product exists
+        if (!$product) {
+            return new ProductResource(false, 'Product not found!', null);
+        }
+
+        //return single product as a resource
+        return new ProductResource(true, 'Detail Data Product!', $product);
+    }
 }
