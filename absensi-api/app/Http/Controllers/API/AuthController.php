@@ -37,4 +37,44 @@ class AuthController extends Controller
 
         return response()->json(['message' => 'Validation passed', 'user' => $user, 'token' => $token], 201);
     }
+
+    public function login(Request $request)
+    {
+        $validation  = Validator::make($request->all(), [
+            'email' => 'required|email',
+            'password' => 'required|min:8'
+        ]);
+
+        if ($validation->fails()) {
+            return response()->json($validation->errors(), 422);
+        }
+
+        $crendential = $request->only('email', 'password');
+        if (!$token = JWTAuth::attempt($crendential)) {
+            return response()->json(['error' => 'Unauthorized'], 401);
+        }
+
+        return response()->json(['token' => $token]);
+    }
+
+    public function logout()
+    {
+        auth('api')->logout();
+        return response()->json(['message' => 'Logout Success']);
+    }
+
+    public function me()
+    {
+        try {
+            $user = auth('api')->user();
+            return response()->json([
+                'message' => 'Fetch profile user success.',
+                'user' => $user
+            ]);
+        } catch (\Throwable $th) {
+            return response()->json([
+                'error' => $th->getMessage()
+            ], 500);
+        }
+    }
 }

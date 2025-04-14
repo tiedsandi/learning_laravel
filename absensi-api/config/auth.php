@@ -41,11 +41,11 @@ return [
             'provider' => 'users',
         ],
         'api' => [
-            'driver' => 'session',
+            'driver' => 'jwt',
             'provider' => 'users',
         ],
     ],
-
+    //  
     /*
     |--------------------------------------------------------------------------
     | User Providers
