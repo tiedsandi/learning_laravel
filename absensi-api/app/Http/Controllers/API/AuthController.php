@@ -67,9 +67,11 @@ class AuthController extends Controller
     {
         try {
             $user = auth('api')->user();
+            auth('api')->user()->employess;
+
             return response()->json([
                 'message' => 'Fetch profile user success.',
-                'user' => $user
+                'user' => $user,
             ]);
         } catch (\Throwable $th) {
             return response()->json([
