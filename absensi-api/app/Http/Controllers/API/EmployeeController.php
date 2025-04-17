@@ -86,6 +86,7 @@ class EmployeeController extends Controller
         'address' => $request->address,
         'is_active' => $request->is_active,
         'gender' => $request->gender,
+        'nip' => $request->nip,
       ];
       $employees = Employees::findOrFail($id);
       $employees->update($data);
