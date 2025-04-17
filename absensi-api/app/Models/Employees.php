@@ -7,24 +7,26 @@ use Illuminate\Database\Eloquent\Model;
 class Employees extends Model
 {
     protected $fillable = [
+        'user_id',
+        'nip',
         'phone',
-        'gender',
         'address',
         'is_active',
-        'user_id',
+        'gender'
     ];
 
-    protected $appends = ['gender_label', 'is_active_label'];
+    protected $appends = ['gender_label',  'is_active_label'];
 
     public function getGenderLabelAttribute()
     {
+
         switch ($this->gender) {
             case '1':
-                $label = "Male";
+                $label = "Man";
                 break;
 
             default:
-                $label = "Female";
+                $label = "Women";
                 break;
         }
 
@@ -39,15 +41,17 @@ class Employees extends Model
                 break;
 
             default:
-                $label = "InActive";
+                $label = "Inactive";
                 break;
         }
 
         return $label;
     }
 
+
+
     public function user()
     {
-        return $this->belongsTo(User::class, 'users_id', 'id');
+        return $this->belongsTo(User::class, 'user_id', 'id');
     }
 }
