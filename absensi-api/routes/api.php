@@ -3,6 +3,7 @@
 use App\Http\Controllers\API\AuthController;
 use App\Http\Controllers\API\EmployeeController;
 use App\Http\Controllers\API\OfficesController;
+use App\Http\Controllers\API\AttendanceController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -22,4 +23,6 @@ Route::middleware('auth:api')->group(function () {
 
     Route::apiResource('employee', EmployeeController::class);
     Route::apiResource('office', OfficesController::class);
+
+    Route::post('attendanceIn', [AttendanceController::class, 'attendanceIn']);
 });
